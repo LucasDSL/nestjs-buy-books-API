@@ -16,4 +16,10 @@ export class Products {
 
   @Column()
   onStock: number;
+
+  @Column({ type: 'timestamp', update: false })
+  createAt: Date;
+
+  @Column({ type: 'timestamp', update: true })
+  updatedAt: Date;
 }
