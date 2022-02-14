@@ -1,22 +1,18 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { CreateProductDto } from './dto/createProduct-dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @Post()
+  async addNew(@Body() createPeoductDto: CreateProductDto) {
+    return await this.productService.addNew(createPeoductDto);
+  }
+
   @Get()
-  findAll() {
-    return this.productService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  async findAll() {
+    return await this.productService.findAll();
   }
 }
