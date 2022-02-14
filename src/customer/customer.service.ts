@@ -13,26 +13,57 @@ export class CustomerService {
     private customerRepository: Repository<Customers>,
   ) {}
 
+  private async encryptPassword(password) {
+    const rounds = 12;
+    const hashedPW = await hash(password, rounds);
+    return hashedPW;
+  }
+
   async create(createCustomerDto: CreateCustomerDto) {
-    createCustomerDto.password = await hash(createCustomerDto.password, 12);
-    const customer = await this.customerRepository.create(createCustomerDto);
+    createCustomerDto.password = await this.encryptPassword(
+      createCustomerDto.password,
+    );
+    const customer = this.customerRepository.create(createCustomerDto);
     await this.customerRepository.save(customer);
     return { status: 'success', message: 'customer created' };
   }
 
-  findAll() {
-    return `This action returns all customer`;
+  async findAll() {
+    const customers = await this.customerRepository.find();
+    return customers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOneByName(name: string) {
+    const customer = await this.customerRepository.findOne({
+      name: name,
+    });
+    return customer;
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async findOneById(id: number) {
+    const customer = await this.customerRepository.findOne({
+      id: id,
+    });
+    return customer;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+  async update(id: number, updateCustomerDto: UpdateCustomerDto) {
+    if (!this.findOneById(id)) {
+      throw new Error('Customer not found');
+    }
+
+    if (updateCustomerDto.password) {
+      updateCustomerDto.password = await this.encryptPassword(
+        updateCustomerDto.password,
+      );
+    }
+    await this.customerRepository.update({ id: id }, updateCustomerDto);
+    return;
+  }
+
+  async remove(id: number) {
+    const customer = await this.findOneById(id);
+    await this.customerRepository.remove(customer);
+    return;
   }
 }
