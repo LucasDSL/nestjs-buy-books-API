@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+const { TableColumn, Table } = require('typeorm');
 
-export class createCustomers1644852348218 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<void> {
+module.exports = class createCustomers1644868614778 {
+  async up(queryRunner) {
     await queryRunner.createTable(
       new Table({
         name: 'customers',
@@ -11,6 +11,7 @@ export class createCustomers1644852348218 implements MigrationInterface {
             type: 'int',
             isPrimary: true,
             isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'name',
@@ -38,11 +39,10 @@ export class createCustomers1644852348218 implements MigrationInterface {
           },
         ],
       }),
-      true,
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  async down(queryRunner) {
     await queryRunner.dropTable('customers');
   }
-}
+};
