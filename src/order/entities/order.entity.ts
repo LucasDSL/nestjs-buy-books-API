@@ -5,8 +5,8 @@ import {
   JoinColumn,
   ManyToMany,
 } from 'typeorm';
-import { Customers } from './Customer.entity';
-import { Products } from './products.entity';
+import { Customers } from '../../customer/entities/customer.entity';
+import { Products } from '../../product/entities/products.entity';
 
 @Entity()
 export class Orders {
