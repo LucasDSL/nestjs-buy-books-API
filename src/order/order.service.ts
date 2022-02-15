@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderFromCustomerDto } from './dto/orderFromCustomer.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { Orders } from './entities/order.entity';
 import { Customers } from '../customer/entities/customer.entity';
 import { Products } from '../product/entities/products.entity';
@@ -37,7 +36,18 @@ export class OrderService {
     return orders;
   }
 
-  async findOne(id: number): Promise<Orders> {
+  async findOne(
+    id: number,
+    relations?: string,
+  ): Promise<Customers | Products | Orders> {
+    if (relations) {
+      const order = await this.ordersRepository.findOne(
+        { id: id },
+        { relations: [relations] },
+      );
+
+      return relations === 'customer' ? order.customer : order.product;
+    }
     const order = await this.ordersRepository.findOne(id);
     return order;
   }

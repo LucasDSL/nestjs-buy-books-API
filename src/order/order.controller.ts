@@ -16,14 +16,19 @@ export class OrderController {
     return this.orderService.findAll();
   }
 
-  @Get('customer')
-  findOrderWithCustomer(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.orderService.findOne(+id);
+  }
+
+  @Get(':id/customer')
+  findOrderWithCustomer(@Param('id') id: string) {
+    return this.orderService.findOne(+id, 'customer');
+  }
+
+  @Get(':id/product')
+  findOrderWithProduct(@Param('id') id: string) {
+    return this.orderService.findOne(+id, 'product');
   }
 
   @Delete(':id')
