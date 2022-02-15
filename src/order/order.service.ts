@@ -33,19 +33,19 @@ export class OrderService {
   }
 
   findAll() {
-    return `This action returns all order`;
+    const orders = this.ordersRepository.find();
+    return orders;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: number): Promise<Orders> {
+    const order = await this.ordersRepository.findOne(id);
+    return order;
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: number) {
+    const order = await this.findOne(id);
+    await this.ordersRepository.remove(order);
+    return;
   }
 
   async validateOrderAndUpdateProductQuantity(

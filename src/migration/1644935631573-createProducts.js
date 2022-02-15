@@ -1,10 +1,10 @@
 const { Table } = require('typeorm');
 
-module.exports = class createCustomers1644868614778 {
+module.exports = class createProducts1644935631573 {
   async up(queryRunner) {
     await queryRunner.createTable(
       new Table({
-        name: 'customers',
+        name: 'products',
         columns: [
           {
             name: 'id',
@@ -18,23 +18,15 @@ module.exports = class createCustomers1644868614778 {
             type: 'varchar',
           },
           {
-            name: 'email',
+            name: 'author',
             type: 'varchar',
           },
           {
-            name: 'password',
-            type: 'varchar',
+            name: 'price',
+            type: 'float',
           },
           {
-            name: 'customerAddress',
-            type: 'text',
-          },
-          {
-            name: 'cpf',
-            type: 'int',
-          },
-          {
-            name: 'cellphone',
+            name: 'onStock',
             type: 'int',
           },
         ],
@@ -43,6 +35,6 @@ module.exports = class createCustomers1644868614778 {
   }
 
   async down(queryRunner) {
-    await queryRunner.dropTable('customers');
+    await queryRunner.dropTable('products');
   }
 };
