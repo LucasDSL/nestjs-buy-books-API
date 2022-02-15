@@ -28,4 +28,8 @@ export class ProductService {
   async remove(id: number): Promise<void> {
     await this.productRepository.delete(id);
   }
+
+  async update(productId: number, newQuantity: number) {
+    await this.productRepository.update(productId, { onStock: newQuantity });
+  }
 }
