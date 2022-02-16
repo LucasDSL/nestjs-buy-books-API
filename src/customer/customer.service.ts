@@ -19,25 +19,22 @@ export class CustomerService {
     return hashedPW;
   }
 
-  async create(createCustomerDto: CreateCustomerDto) {
+  async create(createCustomerDto: CreateCustomerDto): Promise<Customers> {
     createCustomerDto.password = await this.encryptPassword(
       createCustomerDto.password,
     );
     const customer = this.customerRepository.create(createCustomerDto);
-    await this.customerRepository.save(customer);
-    return { status: 'success', message: 'customer created' };
+    return this.customerRepository.save(customer);
   }
 
-  async findAll() {
-    const customers = await this.customerRepository.find();
-    return customers;
+  async findAll(): Promise<Customers[]> {
+    return this.customerRepository.find();
   }
 
-  async findOneByName(name: string) {
-    const customer = await this.customerRepository.findOne({
+  async findOneByName(name: string): Promise<Customers> {
+    return this.customerRepository.findOne({
       name: name,
     });
-    return customer;
   }
 
   async findOneById(id: number) {
@@ -57,13 +54,11 @@ export class CustomerService {
         updateCustomerDto.password,
       );
     }
-    await this.customerRepository.update({ id: id }, updateCustomerDto);
-    return;
+    return this.customerRepository.update({ id: id }, updateCustomerDto);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Customers> {
     const customer = await this.findOneById(id);
-    await this.customerRepository.remove(customer);
-    return;
+    return this.customerRepository.remove(customer);
   }
 }
